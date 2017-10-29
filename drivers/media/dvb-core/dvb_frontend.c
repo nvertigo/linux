@@ -150,8 +150,11 @@ static void __dvb_frontend_free(struct dvb_frontend *fe)
 
 	dvb_frontend_invoke_release(fe, fe->ops.release);
 
-	if (fepriv)
-		kfree(fepriv);
+	if (!fepriv)
+		return;
+
+	kfree(fepriv);
+	fe->frontend_priv = NULL;
 }
 
 static void dvb_frontend_free(struct kref *ref)
